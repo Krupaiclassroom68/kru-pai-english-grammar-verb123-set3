@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verb Order — EP1 (Magic Galaxy Classroom)</title>
+<style>
+  :root{--bg1:#0a0f1f; --bg2:#0e1330; --ink:#e9ecf8; --muted:#a9b1d6; --gold:#ffd166; --neon:#57e0ff; --vio:#8f7dff; --good:#52ffa8; --bad:#ff6b88;}
+  *{box-sizing:border-box} html,body{height:100%}
+  body{margin:0; font-family:"Noto Sans Thai", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color:var(--ink);
+       background: radial-gradient(1000px 500px at 15% -10%, #1a2257 0%, transparent 60%), radial-gradient(1000px 700px at 120% 0%, transparent 55%), linear-gradient(180deg,var(--bg1),var(--bg2)); overflow-x:hidden;}
+  .container{max-width:1100px;margin:0 auto;padding:20px}
+  .title{display:flex;gap:14px;align-items:center;justify-content:center;margin-top:6px}
+  .orb{width:66px;height:66px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fff, #ffd166 30%, transparent 60%), radial-gradient(circle at 70% 70%, #57e0ff, transparent 50%); border:4px solid #000; box-shadow:0 0 28px #ffd16688, inset 0 0 20px #57e0ff55}
+  h1{margin:0;font-size:clamp(26px,5vw,42px);text-shadow:0 2px 0 #000}
+  .subtitle{margin:6px 0 0;color:var(--muted);text-align:center}
+  .card{background:linear-gradient(180deg,#141b3f,#0f1633); border:4px solid #000; border-radius:14px; box-shadow:0 10px 0 #000; padding:18px}
+  .screen{display:none} .screen.active{display:block}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+  .input{flex:1 1 280px;padding:14px 16px;border:4px solid #000;border-radius:12px;background:#0c1231;color:var(--ink);font-size:20px}
+  .btn{appearance:none;border:4px solid #000;border-radius:12px;padding:12px 18px;font-size:20px;font-weight:900;cursor:pointer;color:#0a0f1f;box-shadow:0 6px 0 #000;transition:.15s transform, .15s filter}
+  .btn:active{transform:translateY(2px)} .btn:disabled{filter:grayscale(1) brightness(.7); cursor:not-allowed}
+  .btn-a{background:linear-gradient(180deg,#57e0ff,#3bb9e0)} .btn-b{background:linear-gradient(180deg,#ffd166,#f8b83b)} .btn-g{background:linear-gradient(180deg,#52ffa8,#1fe07a)} .btn-r{background:linear-gradient(180deg,#ff6b88,#f3426b)}
+  .hud{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:10px 0 14px}
+  .pill{background:#0c1231;border:4px solid #000;border-radius:12px;padding:8px 12px;font-weight:900;font-size:18px}
+  .galaxy{height:8px;border-radius:999px;background:linear-gradient(90deg,#57e0ff,#8f7dff,#ffd166);filter:blur(0.2px);margin:10px 0}
+  .q{background:#0d1436;border:4px solid #000;border-radius:14px;padding:16px}
+  .grid{display:grid;gap:12px} .grid-3{grid-template-columns:repeat(3,1fr)}
+  .slot{background:#0b1130;border:3px dashed #394076;color:#93a2ff;border-radius:12px;min-height:66px;display:grid;place-items:center;font-weight:900;font-size:24px}
+
+  .slot.filled{color:var(--gold); border-style:solid; border-color:#ffd166; text-shadow:0 2px 0 #000; box-shadow:0 0 18px #ffd16655, inset 0 0 16px #57e0ff22}
+  .fly{position:fixed; z-index:60; pointer-events:none; margin:0; transform:translate(0,0) scale(1);
+       transition: transform .38s cubic-bezier(.2,.9,.2,1), opacity .38s; }
+  .chip{background:#101744;border:4px solid #000;border-radius:12px;padding:12px 14px;font-weight:900;cursor:pointer;box-shadow:0 5px 0 #000;font-size:22px;text-align:center}
+  .chip-a{background:linear-gradient(180deg,#1d2a6a,#24327a);color:#e8edff}
+  .center{text-align:center}
+  .big{font-size:22px}
+  #fx{position:fixed;inset:0;pointer-events:none;z-index:40}
+  .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;background:#0c1231;border:4px solid #000;border-radius:14px;padding:10px 16px;font-weight:900;display:none;z-index:50}
+  .score{font-size:22px;font-weight:900}
+  .cert{background:linear-gradient(180deg,#fffef4,#fff3c4);color:#2a1f07;border:6px solid #000;border-radius:18px;box-shadow:0 12px 0 #000;padding:20px;max-width:820px;margin:0 auto}
+  .cert h3{font-size:clamp(24px,5vw,38px);margin:4px 0 10px;text-align:center}
+  .cert .name{font-size:clamp(28px,6vw,46px);font-weight:900;margin:12px 0;color:#0b6b4b;text-align:center}
+  .cert .meta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="container">
+  <div class="title">
+    <div class="orb"></div>
+    <div>
+      <h1>Verb Order — EP1 (Magic Galaxy Classroom)</h1>
+      <p class="subtitle">โหมดเข้มข้น: เรียงคำกริยา 3 ช่อง — 30 ข้อ 🔥</p>
+    </div>
+  </div>
+  <div class="galaxy"></div>
+
+  <!-- Start -->
+  <section id="start" class="screen card active">
+    <div class="row">
+      <input id="player" class="input" placeholder="ใส่ชื่อเล่น (สำหรับใบประกาศ)">
+      <button class="btn btn-a" id="go">เริ่มเล่น ▶</button>
+    </div>
+    <p class="center big" style="margin-top:8px;color:#cfe3ff">แตะคำกริยาให้ลงช่อง <b>V1 → V2 → V3</b> ให้ถูกต้องทั้ง 30 ข้อ</p>
+  </section>
+
+  <!-- Game -->
+  <section id="game" class="screen card">
+    <div class="hud">
+      <div class="pill">👤 ผู้เล่น: <span id="name">—</span></div>
+      <div class="pill">ข้อ: <span id="idx">1</span>/30</div>
+      <div class="pill score">คะแนน: <span id="score">0</span></div>
+    </div>
+    <div class="q">
+      <div class="big"><b>คำกริยา:</b> <span id="baseVerb">go</span></div>
+      <div class="grid grid-3" style="margin-top:12px">
+        <div class="slot" id="slot1">V1</div>
+        <div class="slot" id="slot2">V2</div>
+        <div class="slot" id="slot3">V3</div>
+      </div>
+      <div class="grid grid-3" id="choices" style="margin-top:12px"></div>
+      <div class="center" style="margin-top:12px">
+        <button class="btn btn-b" id="reset">เริ่มข้อนี้ใหม่</button>
+        <button class="btn btn-g" id="next" disabled>ข้อต่อไป ➜</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Summary -->
+  <section id="summary" class="screen card">
+    <div class="center">
+      <h2>🏆 จบภารกิจ EP — สรุปคะแนน 🏆</h2>
+      <p class="big">ได้คะแนน <b><span id="sumScore">0</span>/30</b></p>
+      <p class="big">ตอบถูกครั้งแรก: <b><span id="sumFirst">0</span></b> | ผิดแล้วแก้ถูก: <b><span id="sumFix">0</span></b></p>
+    </div>
+    <div class="cert">
+      <h3>Certificate of Achievement</h3>
+      <div class="name" id="certName">Student</div>
+      <p class="center">พิชิต <b>Verb Order — EP1 (Magic Galaxy Classroom)</b> ได้สำเร็จ!</p>
+      <div class="meta"><div>วันที่: <span id="today"></span></div><div>ครูผู้มอบ: <b>Kru Pai Classroom</b></div></div>
+    </div>
+    <div class="center" style="margin-top:14px">
+      <button class="btn btn-b" id="again">เล่นอีกครั้ง</button>
+    </div>
+  </section>
+
+  <div class="toast" id="toast">สุดยอด! เรียงถูกต้อง 🎉</div>
+</div>
+
+<script>
+// ===== Fireworks =====
+const C = document.getElementById('fx'); const X = C.getContext('2d');
+function resize(){C.width=innerWidth; C.height=innerHeight;} addEventListener('resize',resize); resize();
+const sparks=[];
+function burst(x,y,colors){for(let i=0;i<110;i++){const a=Math.random()*Math.PI*2,v=Math.random()*3+2;sparks.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:60+Math.random()*25,color:colors[Math.floor(Math.random()*colors.length)]});}}
+function loop(){requestAnimationFrame(loop);X.globalCompositeOperation='destination-out';X.fillStyle='rgba(0,0,0,0.25)';X.fillRect(0,0,C.width,C.height);X.globalCompositeOperation='lighter';sparks.forEach(p=>{p.life-=1;p.x+=p.vx;p.y+=p.vy;p.vy+=0.02;X.fillStyle=p.color;X.beginPath();X.arc(p.x,p.y,2,0,Math.PI*2);X.fill();});for(let i=sparks.length-1;i>=0;i--){if(sparks[i].life<=0)sparks.splice(i,1);}} loop();
+function winFx(){const cols=['#57e0ff','#8f7dff','#ffd166','#52ffa8','#ff6b88'];burst(innerWidth*0.5,innerHeight*0.25,cols);burst(innerWidth*0.3,innerHeight*0.55,cols);burst(innerWidth*0.7,innerHeight*0.65,cols);}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',1100);}
+
+// ===== Game Data =====
+const DATA = [{"base": "go", "v1": "go", "v2": "went", "v3": "gone"}, {"base": "see", "v1": "see", "v2": "saw", "v3": "seen"}, {"base": "write", "v1": "write", "v2": "wrote", "v3": "written"}, {"base": "come", "v1": "come", "v2": "came", "v3": "come"}, {"base": "take", "v1": "take", "v2": "took", "v3": "taken"}, {"base": "make", "v1": "make", "v2": "made", "v3": "made"}, {"base": "give", "v1": "give", "v2": "gave", "v3": "given"}, {"base": "find", "v1": "find", "v2": "found", "v3": "found"}, {"base": "eat", "v1": "eat", "v2": "ate", "v3": "eaten"}, {"base": "run", "v1": "run", "v2": "ran", "v3": "run"}, {"base": "speak", "v1": "speak", "v2": "spoke", "v3": "spoken"}, {"base": "drink", "v1": "drink", "v2": "drank", "v3": "drunk"}, {"base": "begin", "v1": "begin", "v2": "began", "v3": "begun"}, {"base": "break", "v1": "break", "v2": "broke", "v3": "broken"}, {"base": "choose", "v1": "choose", "v2": "chose", "v3": "chosen"}, {"base": "drive", "v1": "drive", "v2": "drove", "v3": "driven"}, {"base": "fall", "v1": "fall", "v2": "fell", "v3": "fallen"}, {"base": "forget", "v1": "forget", "v2": "forgot", "v3": "forgotten"}, {"base": "get", "v1": "get", "v2": "got", "v3": "gotten"}, {"base": "grow", "v1": "grow", "v2": "grew", "v3": "grown"}, {"base": "know", "v1": "know", "v2": "knew", "v3": "known"}, {"base": "ride", "v1": "ride", "v2": "rode", "v3": "ridden"}, {"base": "ring", "v1": "ring", "v2": "rang", "v3": "rung"}, {"base": "rise", "v1": "rise", "v2": "rose", "v3": "risen"}, {"base": "send", "v1": "send", "v2": "sent", "v3": "sent"}, {"base": "set", "v1": "set", "v2": "set", "v3": "set"}, {"base": "sit", "v1": "sit", "v2": "sat", "v3": "sat"}, {"base": "sleep", "v1": "sleep", "v2": "slept", "v3": "slept"}, {"base": "swim", "v1": "swim", "v2": "swam", "v3": "swum"}, {"base": "build", "v1": "build", "v2": "built", "v3": "built"}];
+let idx=0, score=0, firstTry=true, firstCount=0, fixCount=0;
+let player='นักเรียน';
+
+// ===== UI =====
+const $ = s => document.querySelector(s);
+function show(id){document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active')); document.getElementById(id).classList.add('active');}
+document.getElementById('go').onclick = () => {
+  ensureAudio();
+  player = ($('#player').value || 'นักเรียน').trim();
+  $('#name').textContent = player;
+  startItem();
+  show('game');
+};
+
+document.getElementById('reset').onclick = () => { firstTry=false; clearSlots(); buildChoices(); document.getElementById('next').disabled=true; };
+document.getElementById('next').onclick = () => { idx++; if(idx>=DATA.length) return finish(); startItem(); };
+document.getElementById('again').onclick = () => location.reload();
+
+function startItem(){
+  firstTry=true;
+  $('#idx').textContent = (idx+1);
+  $('#baseVerb').textContent = DATA[idx].base;
+  $('#next').disabled = true;
+
+  clearSlots();
+  buildChoices();
+}
+
+// ===== Tiny Sounds (no external files) =====
+let AC=null;
+function ensureAudio(){
+  try{
+    if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==='suspended') AC.resume();
+  }catch(e){}
+}
+function beep(freq=700, dur=0.05, vol=0.08, type='sine'){
+  if(!AC) return;
+  const o=AC.createOscillator(), g=AC.createGain();
+  o.type=type; o.frequency.value=freq;
+  g.gain.value=vol;
+  o.connect(g); g.connect(AC.destination);
+  o.start();
+  o.stop(AC.currentTime+dur);
+}
+function clickSound(){ beep(680,0.045,0.06,'square'); }
+
+// ===== Helpers to reset current question without resetting firstTry =====
+function clearSlots(){
+  ['slot1','slot2','slot3'].forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.textContent='V'+(i+1);
+    el.dataset.value='';
+    el.classList.remove('filled');
+  });
+}
+function buildChoices(){
+  const arr = [DATA[idx].v1, DATA[idx].v2, DATA[idx].v3].sort(()=>Math.random()-0.5);
+  const wrap = document.getElementById('choices'); wrap.innerHTML='';
+  arr.forEach(w=>{
+    const d=document.createElement('div'); d.className='chip chip-a'; d.textContent=w;
+    d.onclick=()=> placeWord(d);
+    wrap.appendChild(d);
+  });
+}
+
+function placeWord(chipEl){
+  ensureAudio(); clickSound();
+
+  const slots = ['slot1','slot2','slot3'].map(id=>document.getElementById(id));
+  const target = slots.find(el => !el.dataset.value);
+  if(!target) return;
+
+  // Animate: chip flies into the slot
+  const from = chipEl.getBoundingClientRect();
+  const to = target.getBoundingClientRect();
+  const fly = chipEl.cloneNode(true);
+  fly.classList.add('fly');
+  fly.style.left = from.left + 'px';
+  fly.style.top = from.top + 'px';
+  fly.style.width = from.width + 'px';
+  fly.style.height = from.height + 'px';
+  document.body.appendChild(fly);
+
+  // Remove from choices (so it won't stay in the same place)
+  chipEl.remove();
+
+  requestAnimationFrame(()=>{
+    const dx = (to.left + to.width/2) - (from.left + from.width/2);
+    const dy = (to.top + to.height/2) - (from.top + from.height/2);
+    fly.style.transform = `translate(${dx}px, ${dy}px) scale(0.92)`;
+    fly.style.opacity = '0.98';
+  });
+
+  fly.addEventListener('transitionend', ()=> fly.remove(), {once:true});
+
+  // Place word in slot and make it yellow & bold
+  target.textContent = fly.textContent;
+  target.dataset.value = fly.textContent;
+  target.classList.add('filled');
+
+  // check if all filled
+  if(slots.every(el=>el.dataset.value)){
+    const ok = slots[0].dataset.value===DATA[idx].v1 && slots[1].dataset.value===DATA[idx].v2 && slots[2].dataset.value===DATA[idx].v3;
+    if(ok){
+      score++; if(firstTry) firstCount++; else fixCount++;
+      document.getElementById('score').textContent = score;
+      winFx(); toast('สุดยอด! เรียงถูกต้อง 🎉');
+      document.getElementById('next').disabled = false;
+    }else{
+      firstTry=false;
+      toast('ยังไม่ใช่จ้า ลองใหม่อีกครั้ง 🙂');
+      document.getElementById('next').disabled = true;
+      setTimeout(()=>{
+        clearSlots();
+        buildChoices();
+      }, 420);
+    }
+  }
+}
+
+function finish(){
+  // cert & summary
+  document.getElementById('sumScore').textContent = score;
+  document.getElementById('sumFirst').textContent = firstCount;
+  document.getElementById('sumFix').textContent = fixCount;
+  document.getElementById('certName').textContent = player || 'Student';
+  const d = new Date(); const pad=n=>n.toString().padStart(2,'0');
+  document.getElementById('today').textContent = `${'{'}d.getFullYear(){'}'}-${'{'}pad(d.getMonth()+1){'}'}-${'{'}pad(d.getDate()){'}'}`;
+  // finale fireworks
+  for(let i=0;i<6;i++) setTimeout(()=>winFx(), i*450);
+  show('summary');
+}
+</script>
+</body>
+</html>
